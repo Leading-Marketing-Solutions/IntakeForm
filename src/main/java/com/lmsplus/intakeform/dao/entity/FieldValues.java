@@ -11,10 +11,32 @@ public class FieldValues extends BaseEntity {
     IntakeForm intakeForm;
 
     @Column
-    String fieldName;
+    String name;
 
     @Column
-    String fieldValue;
+    String value;
 
+    public IntakeForm getIntakeForm() {
+        return intakeForm;
+    }
 
+    public void setIntakeForm(IntakeForm intakeForm) {
+        this.intakeForm = intakeForm;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
 }

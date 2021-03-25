@@ -5,5 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface IntakeFormRepository extends JpaRepository<IntakeForm, Integer> {
 
+    public IntakeForm findByHash(String hash);
 
 }
