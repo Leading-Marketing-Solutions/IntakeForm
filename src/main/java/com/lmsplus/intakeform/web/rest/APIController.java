@@ -54,7 +54,7 @@ public class APIController {
 
 
     @RequestMapping("get")
-    public String getValue(@RequestParam String hash, @RequestParam String field, @RequestParam String value)
+    public String getValue(@RequestParam String hash, @RequestParam String field)
     {
         IntakeForm intakeForm = intakeFormRepository.findByHash(hash);
         if(intakeForm == null)
