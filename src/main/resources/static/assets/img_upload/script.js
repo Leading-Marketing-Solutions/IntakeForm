@@ -1,8 +1,15 @@
+var hash = window.location.pathname.substring(1);
+var imgCounter = 1;
+
 $(".imgAdd").click(function(){
 
   //TODO анализировать количество уже добавленных. И если их 12, то скрыть кнопку добавления
+    imgCounter++;
+  $(this).closest(".row").find('.imgAdd').before('<div class="col-sm-2 imgUp"><div class="imagePreview"></div><label class="btn btn-primary">Upload<input type="file" class="uploadFile img noLogo" id="img_' + imgCounter + '"  value="Upload Photo" style="width:0px;height:0px;overflow:hidden;"></label><i class="fa fa-times del"></i></div>');
+  $('#img_' + imgCounter).bind('change', function(){
+    handleImgChange($(this));
+  });
 
-  $(this).closest(".row").find('.imgAdd').before('<div class="col-sm-2 imgUp"><div class="imagePreview"></div><label class="btn btn-primary">Upload<input type="file" class="uploadFile img" value="Upload Photo" style="width:0px;height:0px;overflow:hidden;"></label><i class="fa fa-times del"></i></div>');
 
 
 });

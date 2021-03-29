@@ -1,15 +1,13 @@
-//alert("it works");
-
 //todo
 //here add ajax requests in loop
-//var hash = "wsx123";//later get from html
 var hash = window.location.pathname.substring(1);
 var allIds = "";
 
 $( ":input" ).each(function(){
 
     var id = $(this).attr('id');
-    if((id != null)&&(id != 'logofile'))
+    //if((id != null)&&(id != 'logofile'))
+    if((id != null)&&($(this).attr('type') != 'file'))
     {
         $(this).on('focusout', function(){setValue(id);});
 
@@ -20,6 +18,7 @@ $( ":input" ).each(function(){
 
 getValue('logofile');
 
+getImages();
 
 
 $("#logofile").change(function (){
@@ -31,6 +30,7 @@ $("#logofile").change(function (){
        var fileData = $('#logofile').prop('files')[0];
        var formData = new FormData();
        formData.append('file', fileData);
+       formData.append('hash', hash);
 
         $.ajax({
              type: "POST",
@@ -41,18 +41,47 @@ $("#logofile").change(function (){
              data: formData,
              processData: false,
              contentType: false,
-             success: function(){
+             success: function(data){
                 //putValue('logofile', fileName);
-                setValue('logofile', fileName);
+                setValue('logofile', data);
              }
              //dataType: "json",
              //contentType : "application/json",
 
            });
+});
 
 
+$(".noLogo").on('change', function (){
+   handleImgChange($(this));
+});
 
-     });
+
+function handleImgChange(elem)
+{
+    var fileName = $(elem).val().split('\\').pop().replaceAll(/\s/g,'');
+       console.log("image name: " + fileName);
+
+       var fileData = $(elem).prop('files')[0];
+       var formData = new FormData();
+       var htmlId = $(elem).attr('id')
+       formData.append('file', fileData);
+       formData.append('hash', hash);
+       formData.append('htmlId', htmlId);
+
+       $.ajax({
+           type: "POST",
+           url: "/api/image",
+           data: formData,
+           processData: false,
+           contentType: false,
+           success: function(data){
+              setValue(htmlId, data);
+           }
+      });
+
+}
+
 
 function getValue(inputId)
 {
@@ -127,4 +156,9 @@ function processLogo(logoName)
         console.log('need put logo ' + logoName);
         $('#logofile').closest(".imgUp").find('.imagePreview').css("background-image", "url(/api/logo/"+logoName+")");
     }
+}
+
+function getImages()
+{
+
 }

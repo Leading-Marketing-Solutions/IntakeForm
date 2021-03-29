@@ -21,6 +21,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.FileSystems;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.springframework.http.HttpStatus.OK;
 
@@ -31,6 +33,11 @@ public class APIController {
 
     @Value("${logos.path}")
     private String LOGOS_PATH;
+
+    @Value("${images.path}")
+    private String IMAGES_PATH;
+
+    private Set imgSet = new HashSet<>();
 
     private IntakeFormRepository intakeFormRepository;
     private FieldValuesRepository fieldValuesRepository;
@@ -43,6 +50,10 @@ public class APIController {
     {
         this.intakeFormRepository = intakeFormRepository;
         this.fieldValuesRepository = fieldValuesRepository;
+
+        imgSet.add("jpg");
+        imgSet.add("jpeg");
+        imgSet.add("png");
     }
 
 
@@ -88,19 +99,40 @@ public class APIController {
     }
 
     @RequestMapping("logo")
-    public String uploadLogo(@RequestParam MultipartFile file) throws IOException
+    public String uploadLogo(@RequestParam MultipartFile file, @RequestParam String hash) throws IOException
     {
-        String orgName = file.getOriginalFilename().replaceAll(" ", "");
-        String filePath = FileSystems.getDefault().getPath("").toAbsolutePath().toString() + LOGOS_PATH + orgName;
+        String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1);
+        if(!checkImgExt(ext)){
+            return "ERROR";
+        }
+
+        String newFileName = hash + "_logo." + ext;
+        String filePath = FileSystems.getDefault().getPath("").toAbsolutePath().toString() + LOGOS_PATH + newFileName;
         File dest = new File(filePath);
         file.transferTo(dest);
 
-        return "OK";
+        return newFileName;
+    }
+
+    @RequestMapping("image")
+    public String uploadImage(@RequestParam MultipartFile file, @RequestParam String hash, @RequestParam String htmlId) throws IOException
+    {
+        String ext = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1);
+        if(!checkImgExt(ext)){
+            return "ERROR";
+        }
+
+        String newFileName = hash + "_" + htmlId + "." + ext;
+        String filePath = FileSystems.getDefault().getPath("").toAbsolutePath().toString() + IMAGES_PATH + newFileName;
+        File dest = new File(filePath);
+        file.transferTo(dest);
+
+        return newFileName;
     }
 
     @RequestMapping("/logo/{name}")
     @ResponseBody
-    public HttpEntity<byte[]> getArticleImage(@PathVariable String name) throws IOException
+    public HttpEntity<byte[]> getLogo(@PathVariable String name) throws IOException
     {
         String fileName = FileSystems.getDefault().getPath("").toAbsolutePath().toString() + LOGOS_PATH + name;
         String ext = fileName.substring(fileName.lastIndexOf(".") + 1);
@@ -116,9 +148,29 @@ public class APIController {
         headers.setContentType(MediaType.parseMediaType(ext));
 
         return new ResponseEntity<>(bytes, headers, OK);
-
-
     }
+
+    @RequestMapping("/image/{name}")
+    @ResponseBody
+    public HttpEntity<byte[]> getImage(@PathVariable String name) throws IOException
+    {
+        String fileName = FileSystems.getDefault().getPath("").toAbsolutePath().toString() + IMAGES_PATH + name;
+        String ext = fileName.substring(fileName.lastIndexOf(".") + 1);
+
+        byte[] bytes = extractBytes(fileName, ext);
+
+        if(ext.equals("png"))
+            ext = "image/png";
+        else if(ext.equals("jpg") || ext.equals("jpeg"))
+            ext = "image/jpeg";
+
+        final HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.parseMediaType(ext));
+
+        return new ResponseEntity<>(bytes, headers, OK);
+    }
+
+
 
 
     public byte[] extractBytes (String ImageName, String ext)  {
@@ -135,6 +187,28 @@ public class APIController {
         catch (IOException e)
         {
             return null;
+        }
+    }
+
+    private boolean checkImgExt(String ext)
+    {
+        if(imgSet.contains(ext.toLowerCase()))
+            return true;
+        else
+            return false;
+    }
+
+    private void checkDir(String path, String hash)
+    {
+        try
+        {
+            File dir = new File(path + hash);
+            if(!dir.exists())
+                dir.mkdir();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
         }
     }
 }
