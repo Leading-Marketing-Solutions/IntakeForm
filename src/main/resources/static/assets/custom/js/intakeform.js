@@ -3,6 +3,7 @@
 var hash = window.location.pathname.substring(1);
 var allIds = "";
 
+//adding already inputed data to inputs
 $( ":input" ).each(function(){
 
     var id = $(this).attr('id');
@@ -16,11 +17,14 @@ $( ":input" ).each(function(){
     }
 });
 
+
+//rendering logo is it's already added
 getValue('logofile');
 
-getImages();
+//rendering images if they are already added
+getImages(hash);
 
-
+//saving selected logo image
 $("#logofile").change(function (){
        var fileName = $(this).val().split('\\').pop().replaceAll(/\s/g,'');
        //$(".filename").html(fileName);
@@ -52,11 +56,13 @@ $("#logofile").change(function (){
 });
 
 
+//event on image input change
 $(".noLogo").on('change', function (){
    handleImgChange($(this));
 });
 
 
+//saving image to server
 function handleImgChange(elem)
 {
     var fileName = $(elem).val().split('\\').pop().replaceAll(/\s/g,'');
@@ -82,7 +88,7 @@ function handleImgChange(elem)
 
 }
 
-
+//getting value for input by input id from server
 function getValue(inputId)
 {
  var formData = new Object();
@@ -109,16 +115,20 @@ function getValue(inputId)
     });
 }
 
+//putting value to input
 function putValue(inputId, value)
 {
     $('#' + inputId).val(value);
 }
+
 
 function setValue(inputId)
 {
     setValue(inputId, null);
 }
 
+
+//saving value from input to server
 function setValue(inputId, value)
 {
     if(value == null)
@@ -149,6 +159,8 @@ function setValue(inputId, value)
         }
 }
 
+
+//special method for rendering logo image
 function processLogo(logoName)
 {
     if(logoName.length > 0)
@@ -158,7 +170,36 @@ function processLogo(logoName)
     }
 }
 
-function getImages()
+function getImages(hash)
 {
+    $.ajax({
+        type: "GET",
+        url: "/api/images/" + hash,
+        success: function(data){
+            //console.log("all images: " + data);
+            fillImages(data);
+        }
+        //dataType: "json",
+        //contentType : "application/json",
+
+    });
+}
+
+function fillImages(images)
+{
+    var counter = 1;
+
+    images.forEach(function(item){
+
+        $('#img_' + counter).closest(".imgUp").find('.imagePreview').css("background-image", "url(/api/image/"+item+")");
+
+
+        if(counter < images.length)
+        {
+            imgAdd($('#img_' + counter));
+            counter++;
+        }
+
+    });
 
 }

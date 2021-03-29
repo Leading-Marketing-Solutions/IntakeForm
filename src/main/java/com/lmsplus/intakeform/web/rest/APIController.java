@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,7 +23,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.FileSystems;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.OK;
 
@@ -130,6 +133,30 @@ public class APIController {
         return newFileName;
     }
 
+
+    @RequestMapping("images/{hash}")
+    public String[] getAllImages(@PathVariable String hash)
+    {
+        IntakeForm intakeForm = intakeFormRepository.findByHash(hash);
+        if(intakeForm == null)
+            return new String[0];
+
+        List<FieldValues> fieldValues = fieldValuesRepository.getByIntakeForm(intakeForm);
+
+        List<String> strList =  fieldValues.stream().filter(val -> val.getName().startsWith("img_")).map(e -> e.getValue()).collect(Collectors.toList());
+
+        return strList.toArray(new String[0]);
+
+    }
+
+    @Transactional
+    @DeleteMapping("image/{value}")
+    public void deleteImage(@PathVariable String value)
+    {
+        fieldValuesRepository.deleteByValue(value);
+    }
+
+
     @RequestMapping("/logo/{name}")
     @ResponseBody
     public HttpEntity<byte[]> getLogo(@PathVariable String name) throws IOException
@@ -169,6 +196,7 @@ public class APIController {
 
         return new ResponseEntity<>(bytes, headers, OK);
     }
+
 
 
 
