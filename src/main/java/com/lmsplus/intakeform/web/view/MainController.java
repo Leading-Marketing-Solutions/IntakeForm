@@ -31,6 +31,8 @@ public class MainController {
         if(intakeForm == null)
             return "error";
 
+        model.put("status", intakeForm.getStatus());
+
         return "index";
     }
 

@@ -157,6 +157,17 @@ public class APIController {
     }
 
 
+    @PostMapping("/{hash}/submit")
+    public void submitForm(@PathVariable String hash)
+    {
+        IntakeForm intakeForm = intakeFormRepository.findByHash(hash);
+        intakeForm.setStatus(2);
+        intakeFormRepository.save(intakeForm);
+
+    }
+
+//----------------------------------------------------------------------------------------------------------------------
+
     @RequestMapping("/logo/{name}")
     @ResponseBody
     public HttpEntity<byte[]> getLogo(@PathVariable String name) throws IOException
@@ -200,7 +211,7 @@ public class APIController {
 
 
 
-
+//----------------------------------------------------------------------------------------------------------------------
     public byte[] extractBytes (String ImageName, String ext)  {
 
         try

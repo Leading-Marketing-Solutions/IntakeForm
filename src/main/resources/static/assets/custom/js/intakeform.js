@@ -3,6 +3,18 @@
 var hash = window.location.pathname.substring(1);
 var allIds = "";
 
+$(document).ready(function(){
+
+    //rendering logo is it's already added
+    getValue('logofile');
+
+    //rendering images if they are already added
+    getImages(hash);
+
+    if($('#intakeform').hasClass('disabled_form'))
+        disableForm();
+});
+
 //adding already inputed data to inputs
 $( ":input" ).each(function(){
 
@@ -18,11 +30,7 @@ $( ":input" ).each(function(){
 });
 
 
-//rendering logo is it's already added
-getValue('logofile');
 
-//rendering images if they are already added
-getImages(hash);
 
 //saving selected logo image
 $("#logofile").change(function (){
@@ -175,6 +183,7 @@ function getImages(hash)
     $.ajax({
         type: "GET",
         url: "/api/images/" + hash,
+        async: false,
         success: function(data){
             //console.log("all images: " + data);
             fillImages(data);
@@ -203,3 +212,69 @@ function fillImages(images)
     });
 
 }
+
+//----------------------------------
+
+(function () {
+  'use strict'
+
+  // Fetch all the forms we want to apply custom Bootstrap validation styles to
+  var forms = document.querySelectorAll('.needs-validation')
+
+  // Loop over them and prevent submission
+  Array.prototype.slice.call(forms)
+    .forEach(function (form) {
+      form.addEventListener('submit', function (event) {
+        if (!form.checkValidity()) {
+          event.preventDefault()
+          event.stopPropagation()
+          //form.classList.remove('was-validated');
+          alert("please input all required fields!");
+          form.classList.add('was-validated');
+        }
+        else
+        {
+            form.classList.add('was-validated');
+            if(confirm("Are you sure that you completed this form? After confirm you cannot change data!"))
+                submitForm();
+            event.preventDefault();
+        }
+
+
+
+
+      }, false)
+    })
+})()
+
+//--------------------------------
+
+function submitForm()
+{
+    disableForm();
+
+    $.ajax({
+            type: "POST",
+            url: "/api/" + hash + "/submit",
+            success: function(data){
+                //console.log("all images: " + data);
+                //fillImages(data);
+                alert("thank you. Form is validated ans sent to verification!");
+            }
+            //dataType: "json",
+            //contentType : "application/json",
+
+        });
+
+}
+
+
+function disableForm()
+{
+    $("#intakeform :input").prop("disabled", true);
+    $("i.imgAdd").hide();
+    $("i.del").hide();
+//todo
+    //hide buttons add and delete image
+}
+
