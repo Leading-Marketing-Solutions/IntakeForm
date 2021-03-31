@@ -17,31 +17,12 @@
     <link href="assets/img_upload/style.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/fa/css/font-awesome.min.css">
 
-    <!--<style>
-      .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        user-select: none;
-      }
-
-      @media (min-width: 768px) {
-        .bd-placeholder-img-lg {
-          font-size: 3.5rem;
-        }
-      }
-    </style>-->
-
-
-    <!-- Custom styles for this template -->
-    <!--<link href="form-validation.css" rel="stylesheet">-->
   </head>
   <body class="bg-light">
 
 <div class="container">
   <form class="needs-validation" id="intakeform" th:classappend="${status == 2} ? disabled_form : active_form" novalidate>
-    <h2 class="text-center mb-3">Intake Form</h2>
+    <h2 class="text-center mb-3 pt-4">Intake Form</h2>
     <div class="row">
       <div class="col-lg-6 form-group col-xs-12">
         <label for="company">Company Name</label>
@@ -119,7 +100,7 @@
       </div>-->
     </div>
 
-      <h5 class="mb-3">Social Networks</h5>
+      <h3 class="mb-3 pt-3">Social Networks</h3>
 
     <div class="row">
       <div class="col-lg-4 col-xs-12 form-group">
@@ -151,7 +132,7 @@
       </div>
     </div>
 
-    <h5 class="mb-3">Images gallery</h5>
+    <h3 class="mb-3 pt-3">Images gallery</h3>
     <div class="container img_cont">
       <div class="row">
       <div class="col-lg-3 col-sx-12 imgUp">
@@ -164,7 +145,7 @@
       </div><!-- row -->
     </div><!-- container -->
 
-    <h5 class="mb-3">Logo image</h5>
+    <h3 class="mb-3 pt-3">Logo image</h3>
     <div class="container">
       <div class="row">
         <div class="col-lg-3 col-sx-12 imgUp">

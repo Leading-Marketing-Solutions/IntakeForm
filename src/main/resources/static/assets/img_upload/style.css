@@ -35,12 +35,20 @@ body
   background-color:rgba(255,255,255,0.6);
   cursor:pointer;
 }
+
+.fa-times:before {
+    vertical-align: -40%;
+}
+
+.fa-plus:before {
+    vertical-align: -40%;
+}
 .imgAdd
 {
   width:30px;
   height:30px;
   border-radius:50%;
-  background-color:#4bd7ef;
+  background-color:#A60D64;
   color:#fff;
   box-shadow:0px 0px 2px 1px rgba(0,0,0,0.2);
   text-align:center;
@@ -48,4 +56,23 @@ body
   margin-top:0px;
   cursor:pointer;
   font-size:15px;
+}
+
+.btn-primary {
+    background-color: #A60D64!important;
+    border-color: #A60D64!important;
+}
+
+.bg-light {
+    background-color: #FFF!important;
+}
+
+.mb-3 {
+    color: #A60D64!important;
+}
+
+.btn-primary_img {
+    background-color: #D9A102!important;
+    border-color: #D9A102!important;
+    color: #FFF;
 }

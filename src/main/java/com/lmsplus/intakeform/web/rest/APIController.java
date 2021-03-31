@@ -4,6 +4,7 @@ import com.lmsplus.intakeform.dao.entity.FieldValues;
 import com.lmsplus.intakeform.dao.entity.IntakeForm;
 import com.lmsplus.intakeform.dao.repository.FieldValuesRepository;
 import com.lmsplus.intakeform.dao.repository.IntakeFormRepository;
+import com.lmsplus.intakeform.service.notify.TelegramNotifier;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,19 +41,25 @@ public class APIController {
     @Value("${images.path}")
     private String IMAGES_PATH;
 
+    @Value("${telegram.admin.chat_id}")
+    private Long TELEGRAM_ADMIN_ID;
+
     private Set imgSet = new HashSet<>();
 
     private IntakeFormRepository intakeFormRepository;
     private FieldValuesRepository fieldValuesRepository;
+    private TelegramNotifier telegramNotifier;
 
     private static final Logger logger = LoggerFactory.getLogger(APIController.class);
 
 
     public APIController(IntakeFormRepository intakeFormRepository,
-                         FieldValuesRepository fieldValuesRepository)
+                         FieldValuesRepository fieldValuesRepository,
+                         TelegramNotifier telegramNotifier)
     {
         this.intakeFormRepository = intakeFormRepository;
         this.fieldValuesRepository = fieldValuesRepository;
+        this.telegramNotifier = telegramNotifier;
 
         imgSet.add("jpg");
         imgSet.add("jpeg");
@@ -163,6 +170,8 @@ public class APIController {
         IntakeForm intakeForm = intakeFormRepository.findByHash(hash);
         intakeForm.setStatus(2);
         intakeFormRepository.save(intakeForm);
+
+        telegramNotifier.notify("intake form with hash = " + hash + " is submitted", TELEGRAM_ADMIN_ID);
 
     }
 
