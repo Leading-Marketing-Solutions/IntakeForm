@@ -117,7 +117,7 @@ public class APIController {
         }
 
         String newFileName = hash + "_logo." + ext;
-        String filePath = FileSystems.getDefault().getPath("").toAbsolutePath().toString() + LOGOS_PATH + newFileName;
+        String filePath = LOGOS_PATH + newFileName;
         File dest = new File(filePath);
         file.transferTo(dest);
 
@@ -133,7 +133,7 @@ public class APIController {
         }
 
         String newFileName = hash + "_" + htmlId + "." + ext;
-        String filePath = FileSystems.getDefault().getPath("").toAbsolutePath().toString() + IMAGES_PATH + newFileName;
+        String filePath = IMAGES_PATH + newFileName;
         File dest = new File(filePath);
         file.transferTo(dest);
 
@@ -177,66 +177,6 @@ public class APIController {
 
 //----------------------------------------------------------------------------------------------------------------------
 
-    @RequestMapping("/logo/{name}")
-    @ResponseBody
-    public HttpEntity<byte[]> getLogo(@PathVariable String name) throws IOException
-    {
-        String fileName = FileSystems.getDefault().getPath("").toAbsolutePath().toString() + LOGOS_PATH + name;
-        String ext = fileName.substring(fileName.lastIndexOf(".") + 1);
-
-        byte[] bytes = extractBytes(fileName, ext);
-
-        if(ext.equals("png"))
-            ext = "image/png";
-        else if(ext.equals("jpg") || ext.equals("jpeg"))
-            ext = "image/jpeg";
-
-        final HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.parseMediaType(ext));
-
-        return new ResponseEntity<>(bytes, headers, OK);
-    }
-
-    @RequestMapping("/image/{name}")
-    @ResponseBody
-    public HttpEntity<byte[]> getImage(@PathVariable String name) throws IOException
-    {
-        String fileName = FileSystems.getDefault().getPath("").toAbsolutePath().toString() + IMAGES_PATH + name;
-        String ext = fileName.substring(fileName.lastIndexOf(".") + 1);
-
-        byte[] bytes = extractBytes(fileName, ext);
-
-        if(ext.equals("png"))
-            ext = "image/png";
-        else if(ext.equals("jpg") || ext.equals("jpeg"))
-            ext = "image/jpeg";
-
-        final HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.parseMediaType(ext));
-
-        return new ResponseEntity<>(bytes, headers, OK);
-    }
-
-
-
-
-//----------------------------------------------------------------------------------------------------------------------
-    public byte[] extractBytes (String ImageName, String ext)  {
-
-        try
-        {
-            ByteArrayOutputStream baos=new ByteArrayOutputStream(1000);
-            BufferedImage img=ImageIO.read(new File(ImageName));
-            ImageIO.write(img, ext, baos);
-            baos.flush();
-
-            return baos.toByteArray();
-        }
-        catch (IOException e)
-        {
-            return null;
-        }
-    }
 
     private boolean checkImgExt(String ext)
     {

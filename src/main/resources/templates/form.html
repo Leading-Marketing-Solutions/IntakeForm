@@ -3,12 +3,10 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-    <meta name="generator" content="Hugo 0.79.0">
-    <title>Checkout example · Bootstrap v5.0</title>
 
-    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/checkout/">
+    <title>LMS Intake Form</title>
+
+    <!--<link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/checkout/">-->
 
 
 
@@ -16,13 +14,15 @@
     <link href="assets/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/img_upload/style.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/fa/css/font-awesome.min.css">
+    <link href="assets/custom/css/style.css" rel="stylesheet">
 
   </head>
   <body class="bg-light">
+  <!-- Button trigger modal -->
 
 <div class="container">
   <form class="needs-validation" id="intakeform" th:classappend="${status == 2} ? disabled_form : active_form" novalidate>
-    <h2 class="text-center mb-3 pt-4">Intake Form</h2>
+    <h2 class="text-center mb-3 pt-4">Intake Form <button type="button" id="modalhint" class="btn btn-circle btn-md" data-toggle="modal" data-target="#exampleModal"><span style="font-size:16px;">?</span></button></h2>
     <div class="row">
       <div class="col-lg-6 form-group col-xs-12">
         <label for="company">Company Name</label>
@@ -45,7 +45,7 @@
         <input type="text" class="form-control" id="site" placeholder="example.com">
       </div>
       <div class="col-lg-6 form-group col-xs-12">
-        <label for="phone1">Phone 1</label>
+        <label for="phone1">Phone</label>
         <input type="text" class="form-control" id="phone1" placeholder="(123) 456-7890" required>
         <div class="invalid-feedback">
           Please input phone number.
@@ -54,14 +54,14 @@
     </div>
     <div class="row">
       <div class="col-lg-6 form-group col-xs-12">
-        <label for="address">Address</label>
+        <label for="address">Address (or just City)</label>
         <input type="text" class="form-control" id="address" placeholder="required" required>
         <div class="invalid-feedback">
           Please input address.
         </div>
       </div>
       <div class="col-lg-6 form-group col-xs-12">
-        <label for="phone2">Phone 2</label>
+        <label for="phone2">Cell Phone</label>
         <input type="text" class="form-control" id="phone2" placeholder="(123) 456-7890">
       </div>
     </div>
@@ -76,7 +76,7 @@
     </div>
     <div class="row">
       <div class="col form-group">
-        <label for="services">Comma separated list of provided services</label>
+        <label for="services">Provided Services</label>
         <textarea class="form-control" id="services" rows="2" placeholder="required" required></textarea>
         <div class="invalid-feedback">
           Please list services that your company provides.
@@ -173,8 +173,29 @@
     <p class="mb-1">&copy; 2021 Leading Marketing Solutions. All Rights Reserved</p>
   </footer>
 </div>
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Intake Form Instructions</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Please complete this Intake Form so that we can add your Member Profile to our website.
+        <br/><br/>
+        You can add information, images, and videos to this form. All changes are automatically saved immediately after input. If you are done completing your profile, click "Submit" and we will add your profile to our Member Directory. If you do not complete your profile and wish to return at a later date, you can simply exit out of the page. All of the information that you have entered will be automatically saved for the next time that you return.
+        <br/><br/>
+        If you have already submitted your form and need to make changes to it, please email our System Administrator at <a href="mailto:christian@lms-plus.com">christian@lms-plus.com</a>. Please include your unique Intake Form url in the body of your email.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+    <script src="assets/dist/js/jquery.js"></script>
     <script src="assets/dist/js/bootstrap.bundle.min.js"></script>
     <script src="assets/img_upload/script.js"></script>
     <script src="assets/custom/js/intakeform.js"></script>

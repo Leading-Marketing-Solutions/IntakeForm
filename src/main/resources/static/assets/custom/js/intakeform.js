@@ -174,7 +174,7 @@ function processLogo(logoName)
     if(logoName.length > 0)
     {
         console.log('need put logo ' + logoName);
-        $('#logofile').closest(".imgUp").find('.imagePreview').css("background-image", "url(/api/logo/"+logoName+")");
+        $('#logofile').closest(".imgUp").find('.imagePreview').css("background-image", "url(/logo/"+logoName+")");
     }
 }
 
@@ -200,7 +200,7 @@ function fillImages(images)
 
     images.forEach(function(item){
 
-        $('#img_' + counter).closest(".imgUp").find('.imagePreview').css("background-image", "url(/api/image/"+item+")");
+        $('#img_' + counter).closest(".imgUp").find('.imagePreview').css("background-image", "url(/image/"+item+")");
 
 
         if(counter < images.length)
@@ -236,7 +236,22 @@ function fillImages(images)
         {
             form.classList.add('was-validated');
             if(confirm("Are you sure that you completed this form? After confirm you cannot change data!"))
-                submitForm();
+            {
+                disableForm();
+
+                    $.ajax({
+                            type: "POST",
+                            url: "/api/" + hash + "/submit",
+                            success: function(data){
+                                //console.log("all images: " + data);
+                                //fillImages(data);
+                                alert("Thank you. Form is validated and sent to verification!");
+                            }
+                            //dataType: "json",
+                            //contentType : "application/json",
+
+                        });
+            }
             event.preventDefault();
         }
 
@@ -249,29 +264,11 @@ function fillImages(images)
 
 //--------------------------------
 
-function submitForm()
-{
-    disableForm();
-
-    $.ajax({
-            type: "POST",
-            url: "/api/" + hash + "/submit",
-            success: function(data){
-                //console.log("all images: " + data);
-                //fillImages(data);
-                alert("thank you. Form is validated ans sent to verification!");
-            }
-            //dataType: "json",
-            //contentType : "application/json",
-
-        });
-
-}
-
 
 function disableForm()
 {
     $("#intakeform :input").prop("disabled", true);
+    $('#modalhint').prop("disabled", false);
     $("i.imgAdd").hide();
     $("i.del").hide();
 //todo
