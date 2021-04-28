@@ -29,6 +29,15 @@ $( ":input" ).each(function(){
     }
 });
 
+$('#reviews').change(function() {
+        if(this.checked) {
+            setValue("reviews", "true");
+        }
+        else {
+            setValue("reviews", "false");
+        }
+});
+
 
 
 
