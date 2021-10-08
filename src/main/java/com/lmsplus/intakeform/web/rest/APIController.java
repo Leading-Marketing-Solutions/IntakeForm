@@ -76,6 +76,9 @@ public class APIController {
     @RequestMapping("set")
     public String setValue(@RequestParam String hash, @RequestParam String field, @RequestParam String value)
     {
+
+        logger.info("form: " + hash + ", field: " + field + ", value: " + value);
+
         IntakeForm intakeForm = intakeFormRepository.findByHash(hash);
         if(intakeForm == null)
             return "data not found";
